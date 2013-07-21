@@ -575,7 +575,7 @@ function $RootScopeProvider(){
        *
        * @description
        * Broadcasted when a scope and its children are being destroyed.
-       * 
+       *
        * Note that, in AngularJS, there is also a `$destroy` jQuery event, which can be used to
        * clean up DOM bindings before an element is removed from the DOM.
        */
@@ -599,7 +599,7 @@ function $RootScopeProvider(){
        * Just before a scope is destroyed a `$destroy` event is broadcasted on this scope.
        * Application code can register a `$destroy` event handler that will give it chance to
        * perform any necessary cleanup.
-       * 
+       *
        * Note that, in AngularJS, there is also a `$destroy` jQuery event, which can be used to
        * clean up DOM bindings before an element is removed from the DOM.
        */
@@ -739,7 +739,7 @@ function $RootScopeProvider(){
             $rootScope.$digest();
           } catch (e) {
             $exceptionHandler(e);
-            throw e;
+            throw $rootScopeMinErr('baddigest', "The $apply's $digest can't be completed");
           }
         }
       },
