@@ -1071,6 +1071,33 @@ describe('$http', function() {
             expect(callback).toHaveBeenCalledOnce();
             expect(callback.mostRecentCall.args[0]).toEqual('{{some}}');
           });
+
+          it('should deserialize JSON strings sent with content type containing "json"', function () {
+            $httpBackend.expect('GET', '/url').respond('"some"', {'Content-Type': 'application/json;charset=utf-8'});
+            $http.get('/url').success(callback);
+            $httpBackend.flush();
+
+            expect(callback).toHaveBeenCalledOnce();
+            expect(callback.mostRecentCall.args[0]).toEqual('some');
+          });
+
+          it('should deserialize JSON numbers sent with content type containing "json"', function () {
+            $httpBackend.expect('GET', '/url').respond('1', {'Content-Type': 'application/json;charset=utf-8'});
+            $http.get('/url').success(callback);
+            $httpBackend.flush();
+
+            expect(callback).toHaveBeenCalledOnce();
+            expect(callback.mostRecentCall.args[0]).toEqual(1);
+          });
+
+          it('should deserialize JSON null values sent with content type containing "json"', function () {
+            $httpBackend.expect('GET', '/url').respond('null', {'Content-Type': 'application/json;charset=utf-8'});
+            $http.get('/url').success(callback);
+            $httpBackend.flush();
+
+            expect(callback).toHaveBeenCalledOnce();
+            expect(callback.mostRecentCall.args[0]).toBeNull();
+          });
         });
 
 

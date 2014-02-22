@@ -91,11 +91,12 @@ function $HttpProvider() {
 
   var defaults = this.defaults = {
     // transform incoming response data
-    transformResponse: [function(data) {
+    transformResponse: [function(data, headers) {
       if (isString(data)) {
+        var contentType = isFunction(headers) && headers('Content-Type');
         // strip json vulnerability protection prefix
         data = data.replace(PROTECTION_PREFIX, '');
-        if (JSON_START.test(data) && JSON_END.test(data))
+        if ((contentType && contentType.indexOf('json') >= 0) || (JSON_START.test(data) && JSON_END.test(data)))
           data = fromJson(data);
       }
       return data;
