@@ -1,7 +1,11 @@
 'use strict';
 
-function createXhr() {
-    return new window.XMLHttpRequest();
+function $xhrFactoryProvider() {
+  this.$get = function() {
+    return function createXhr(method, url) {
+      return new window.XMLHttpRequest();
+    };
+  }
 }
 
 /**
@@ -21,8 +25,8 @@ function createXhr() {
  * $httpBackend} which can be trained with responses.
  */
 function $HttpBackendProvider() {
-  this.$get = ['$browser', '$window', '$document', function($browser, $window, $document) {
-    return createHttpBackend($browser, createXhr, $browser.defer, $window.angular.callbacks, $document[0]);
+  this.$get = ['$browser', '$xhrFactory', '$window', '$document', function($browser, $xhrFactory, $window, $document) {
+    return createHttpBackend($browser, $xhrFactory, $browser.defer, $window.angular.callbacks, $document[0], $xhrFactory);
   }];
 }
 
@@ -46,7 +50,7 @@ function createHttpBackend($browser, createXhr, $browserDefer, callbacks, rawDoc
       });
     } else {
 
-      var xhr = createXhr();
+      var xhr = createXhr(method, url); //we could add more arguments here, if needed
 
       xhr.open(method, url, true);
       forEach(headers, function(value, key) {
